@@ -4,6 +4,7 @@ import java.time.Duration;
 
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -21,6 +22,7 @@ public class Resource {
     @GET
     @Path("/stream")
     @Produces("text/event-stream")
+    @Transactional
     public Multi<String> stream() {
         return Multi.createFrom().items(1, 2, 3, 4, 5)
                 .onItem().call(i -> Uni.createFrom().nullItem().onItem().delayIt().by(Duration.ofMillis(500)))
