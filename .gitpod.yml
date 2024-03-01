@@ -3,6 +3,8 @@ image:
 
 tasks:
   - init: |
+      mvn clean package
+      mvn clean dev
 
 vscode:
   extensions:
