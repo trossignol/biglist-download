@@ -1,8 +1,5 @@
 package fr.rossi.biglistdownload;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.rossi.biglistdownload.dataload.Dataload;
 import fr.rossi.biglistdownload.util.HackIssue26253;
 import fr.rossi.biglistdownload.util.JsonMapper;
 import io.quarkus.narayana.jta.runtime.TransactionConfiguration;
@@ -16,11 +13,14 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.logging.Logger;
 
 import java.util.stream.Collectors;
 
 @Path("/api")
 public class Resource {
+
+    private static final Logger LOG = Logger.getLogger(Resource.class);
 
     @Inject
     JsonMapper jsonMapper;
@@ -32,6 +32,7 @@ public class Resource {
     @Path("/count")
     @Produces(MediaType.TEXT_PLAIN)
     public Long count() {
+        LOG.info(">>> Count >>>");
         return Person.count();
     }
 
@@ -39,9 +40,9 @@ public class Resource {
     @Path("/stream")
     @Produces("text/event-stream")
     @Transactional
-    @TransactionConfiguration(timeout = 2)
+    @TransactionConfiguration(timeout = 200)
     public Multi<String> stream() {
-        System.out.println("<<<<<< Start new stream >>>>>>>");
+        LOG.info(">>> Start new stream >>>");
         return new HackIssue26253(Multi.createFrom()
                 .items(Person.streamAll(Sort.by("firstname"))).map(this.jsonMapper::toJson))
                 .producesSSE()
@@ -52,6 +53,7 @@ public class Resource {
     @GET
     @Path("/client/test")
     public Uni<Long> testStream() {
+        LOG.info(">>> Test stream >>>");
         return new HackIssue26253(this.localClient.stream())
                 .consumesSSE()
                 .map(json -> this.jsonMapper.fromJson(json, Person.class))

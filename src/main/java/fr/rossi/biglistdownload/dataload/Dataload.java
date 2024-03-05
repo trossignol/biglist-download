@@ -1,16 +1,18 @@
 package fr.rossi.biglistdownload.dataload;
 
+import fr.rossi.biglistdownload.Person;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.jboss.logging.Logger;
+
 import java.util.ArrayList;
 import java.util.Random;
 
-import fr.rossi.biglistdownload.Person;
-import org.apache.commons.lang3.RandomStringUtils;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
-
 @ApplicationScoped
 public class Dataload {
+
+    private static final Logger LOG = Logger.getLogger(Dataload.class);
 
     private static final int NB_PERSONS = 100_000;
     private static final Random RANDOM = new Random();
@@ -18,6 +20,7 @@ public class Dataload {
     @Transactional
     public void init() {
         var count = Person.count();
+        LOG.info("Database contains " + count + " persons");
         if (count >= NB_PERSONS) return;
 
         var newPersons = new ArrayList<>();
@@ -30,6 +33,8 @@ public class Dataload {
             newPersons.add(person);
         }
 
+        LOG.info("Load " + newPersons.size() + " persons to database");
         Person.persist(newPersons);
+        LOG.info(" -- dataload achieved");
     }
 }
