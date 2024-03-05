@@ -29,3 +29,6 @@ test-stream:
 
 test-client:
 	curl http://localhost:8080/api/client/test
+
+web:
+	open http://localhost:8080/
