@@ -1,0 +1,33 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    max-width: 600px;
+    margin: 0px auto;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 16pt;
+    text-align: center;
+}
+
+#stream {
+    text-align: center;
+}
+
+#stream>button {
+    margin: 10px;
+}
+
+#stream>#message {
+    color: green;
+    margin: 10px;
+}
+
+#stream>#message.error {
+    color: red;
+}
+
+#stream>.result li {
+    font-size: 8pt;
+    text-align: left;
+}
