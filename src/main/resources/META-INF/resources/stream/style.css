@@ -1,0 +1,38 @@
+#stream {
+    text-align: center;
+}
+
+#stream input {
+    text-align: center;
+}
+
+#stream>div {
+    margin: 10px 0;
+}
+
+#stream>.time {
+    display: flex;
+    justify-content: center;
+}
+
+#stream>.time>button {
+    display: none;
+}
+
+#stream button {
+    margin: 0 10px;
+}
+
+#stream>#message {
+    color: green;
+    margin: 10px;
+}
+
+#stream>#message.error {
+    color: red;
+}
+
+#stream>.result li {
+    font-size: 8pt;
+    text-align: left;
+}

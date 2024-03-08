@@ -9,15 +9,19 @@
 <body>
     <h1>Welcome to streaming test page</h1>
     <div id="stream">
-        <button>Launch</button>
+        <div class="launch">
+            <input type="text" size="3" value="1" />
+            <button>Launch</button>
+        </div>
+        <div class="time">
+            <div class="average"></div>
+            <button class="reset">Reset</button>
+        </div>
         <div id="message" class="error"></div>
         <div class="result"></div>
     </div>
 
-    <script src="streamHandler.js"></script>
-    <script type="text/javascript">
-        StreamHandler.init();
-    </script>
+    <script type="module" src="index.js"></script>
 </body>
 
 </html>

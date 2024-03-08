@@ -51,7 +51,7 @@ public class Resource {
     }
 
     @GET
-    @Path("/client/test")
+    @Path("/client")
     public Uni<Long> testStream() {
         LOG.info(">>> Test stream >>>");
         return new HackIssue26253(this.localClient.stream())
