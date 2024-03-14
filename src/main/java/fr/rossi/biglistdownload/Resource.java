@@ -6,15 +6,18 @@ import io.quarkus.narayana.jta.runtime.TransactionConfiguration;
 import io.quarkus.panache.common.Sort;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Path("/api")
@@ -37,9 +40,17 @@ public class Resource {
     }
 
     @GET
+    @Path("/list")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Person> listAll(@QueryParam("limit") @Nullable Integer limit) {
+        return limit == null
+                ? Person.listAll()
+                : Person.list("FROM Person ORDER BY firstname LIMIT :limit", Map.of("limit", limit));
+    }
+
+    @GET
     @Path("/stream")
     @Produces("text/event-stream")
-    @Transactional
     @TransactionConfiguration(timeout = 200)
     public Multi<String> stream() {
         LOG.info(">>> Start new stream >>>");
