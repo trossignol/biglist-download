@@ -4,6 +4,7 @@ import fr.rossi.biglistdownload.util.HackIssue26253;
 import fr.rossi.biglistdownload.util.JsonMapper;
 import io.quarkus.narayana.jta.runtime.TransactionConfiguration;
 import io.quarkus.panache.common.Sort;
+import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.Nullable;
@@ -52,6 +53,7 @@ public class Resource {
     @Path("/stream")
     @Produces("text/event-stream")
     @TransactionConfiguration(timeout = 200)
+    @Blocking // I don't understand why I need to put this @Blocking
     public Multi<String> stream() {
         LOG.info(">>> Start new stream >>>");
         return new HackIssue26253(Multi.createFrom()

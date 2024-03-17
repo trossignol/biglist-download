@@ -1,16 +1,22 @@
 import { Dom } from "./dom.js";
 
-export class GetAll {
+export class GetAllHandler {
 }
 
-GetAll.URL = "/api/list";
+GetAllHandler.URL = "/api/list";
 
-SseHandler.prototype.run = function () {
-    this.source = new EventSource(SseHandler.URL);
-    this.source.onmessage = (event) => Dom.catch(() => this.rowHandler.addRow(event.data));
-    this.source.onerror = (error) => { Dom.setError(error); this.close(); }
+GetAllHandler.prototype.run = function () {
+  fetch(GetAllHandler.URL)
+    .then(response => {
+      if (!response.ok) return Dom.setError(`HTTP error (status=${response.status})`);
+      response.json().then(rows => this.addRows(rows));
+    })
+    .catch(error => Dom.setError(error));
 }
 
-SseHandler.prototype.close = function () {
-    this.source?.close();
+GetAllHandler.prototype.addRows = function (rows) {
+  rows.map(JSON.stringify).forEach(row => this.rowHandler.addRow(row));
+  this.rowHandler.end();
 }
+
+GetAllHandler.prototype.close = function () { }
